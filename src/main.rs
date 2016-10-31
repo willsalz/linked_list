@@ -30,9 +30,19 @@ impl List {
         self.head = Node::Head(data, Box::new(mem::replace(&mut self.head, Node::Tail)));
     }
 
+    fn pop(&mut self) -> Option<Data> {
+        match mem::replace(&mut self.head, Node::Tail) {
+            Node::Tail => None,
+            Node::Head(data, tail) => {
+                self.head = *tail;
+                Some(data)
+            }
+        }
+    }
+
     fn peek(&self) -> Option<Data> {
         match self.head {
-            Node::Head(data, ref tail) => Some(data),
+            Node::Head(data, ref _tail) => Some(data),
             Node::Tail => None
         }
     }
@@ -41,8 +51,9 @@ impl List {
 
 fn main() {
     let mut list = List::new(1);
-    println!("{:?}", list);
-    println!("{:?}", list.peek());
     list.push(2);
+    list.push(3);
+    list.peek();
+    list.pop();
     println!("{:?}", list);
 }
