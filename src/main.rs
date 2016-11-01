@@ -1,36 +1,34 @@
 use std::mem;
 
-type Data = i32;
-
 #[derive(Debug)]
-enum Node {
-    Head(Data, Box<Node>),
+enum Node<T> {
+    Head(T, Box<Node<T>>),
     Tail
 }
 
-impl Node {
-    fn new(data: Data) -> Self {
+impl<T> Node<T> {
+    fn new(data: T) -> Self {
         Node::Head(data, Box::new(Node::Tail))
     }
 }
 
 
 #[derive(Debug)]
-struct List {
-    head: Node
+struct List<T> {
+    head: Node<T>
 }
 
-impl List {
+impl<T> List<T> {
 
-    fn new(data: Data) -> Self {
+    fn new(data: T) -> Self {
         List{head: Node::new(data)}
     }
 
-    fn push(&mut self, data: Data) {
+    fn push(&mut self, data: T) {
         self.head = Node::Head(data, Box::new(mem::replace(&mut self.head, Node::Tail)));
     }
 
-    fn pop(&mut self) -> Option<Data> {
+    fn pop(&mut self) -> Option<T> {
         match mem::replace(&mut self.head, Node::Tail) {
             Node::Tail => None,
             Node::Head(data, tail) => {
@@ -40,20 +38,12 @@ impl List {
         }
     }
 
-    fn peek(&self) -> Option<Data> {
-        match self.head {
-            Node::Head(data, ref _tail) => Some(data),
-            Node::Tail => None
-        }
-    }
-
 }
 
 fn main() {
-    let mut list = List::new(1);
-    list.push(2);
-    list.push(3);
-    list.peek();
+    let mut list = List::new("hello");
+    list.push("bye");
+    list.push("world");
     list.pop();
     println!("{:?}", list);
 }
