@@ -49,10 +49,41 @@ impl<T> List<T> {
 
 }
 
+impl<T> IntoIterator for List<T> {
+    type Item = T;
+    type IntoIter = ListIterator<T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        ListIterator::new(self)
+    }
+}
+
+#[derive(Debug)]
+struct ListIterator<T> {
+    list: List<T>
+}
+
+impl<T> ListIterator<T> {
+    fn new(list: List<T>) -> Self {
+        ListIterator { list: list }
+    }
+}
+
+impl<T> Iterator for ListIterator<T> {
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.list.pop()
+    }
+}
+
+
 fn main() {
     let mut list = List::new("hello");
     list.push("world");
     list.push("bye");
     list.pop();
-    println!("{:?}", list.peek());
+    for val in list {
+        println!("{:?}", val);
+    }
 }
