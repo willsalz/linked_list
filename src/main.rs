@@ -38,12 +38,21 @@ impl<T> List<T> {
         }
     }
 
+    fn peek(&self) -> Option<&T> {
+        match self.head {
+            Node::Tail => None,
+            Node::Head(ref data, ref _tail) => {
+                Some(data)
+            }
+        }
+    }
+
 }
 
 fn main() {
     let mut list = List::new("hello");
-    list.push("bye");
     list.push("world");
+    list.push("bye");
     list.pop();
-    println!("{:?}", list);
+    println!("{:?}", list.peek());
 }
